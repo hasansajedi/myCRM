@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block page_title %} Contacts list {% endblock %}
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Status</th>
+            <th scope="col">#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in object_list %}
+            <tr>
+                <th scope="row">1</th>
+                <td>{{ obj.first_name }} {{ obj.last_name }}</td>
+                <td>{{ obj.email }}</td>
+                <td>{{ obj.created_by }}</td>
+                <td>{{ obj.created_on }}</td>
+                <td>{{ obj.is_active }}</td>
+                <td>
+                    <a href="{{ instance.get_absolute_url }}" class="btn btn-primary">View</a>
+                    <a href="{% url 'contacts:detail' slug=obj.id %}" class="btn btn-warning">URL Shortcut</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
