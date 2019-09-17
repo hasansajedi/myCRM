@@ -1,12 +1,13 @@
 from django.conf.urls import url
+from django.urls import path
 
 from .views import (
     ContactListView,
     ContactDetailSlugView,
-    contact_detail)
+    delete)
 
 urlpatterns = [
-    url(r'$', ContactListView.as_view(), name='list'),
-    url(r'^(?P<slug>[\w-]+)/$', ContactDetailSlugView.as_view(), name='detail'),
-    url(r'^$', contact_detail, name="contact_detail"),
+    url(r'list$', ContactListView.as_view(), name='list'),
+    url(r'^delete/(?P<id>.*)$', delete, name='delete'),
+    path('<int:pk>/', ContactDetailSlugView.as_view(), name='contact_detail'),
 ]

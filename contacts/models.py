@@ -9,13 +9,14 @@ from shortuuidfield import ShortUUIDField
 
 class ContactQuerySet(models.query.QuerySet):
     def active(self):
-        return self.filter(is_active=True)
+        return self.filter(is_active=True, deleted=False)
 
     def search(self, query):
         lookups = (Q(first_name__icontains=query) |
                    Q(last_name__icontains=query) |
                    Q(email__icontains=query))
         return self.filter(lookups).distinct()
+
 
 class ContactManager(models.Manager):
     def get_queryset(self):
@@ -30,8 +31,29 @@ class ContactManager(models.Manager):
             return qs.first()
         return None
 
+    def disable_by_id(self, id):
+        qs = Contact.objects.get(id=id)
+        if qs is not None:
+            qs.deleted = True
+            qs.is_active = False
+            qs.save()
+            return True
+        else:
+            return False
+
+    def remove_by_id(self, id):
+        qs = self.get_queryset().filter(id=id)
+        if qs.count() == 1:
+            deleted, _rows_count = qs.delete()
+            if deleted:
+                return True
+            else:
+                return False
+        return None
+
     def search(self, query):
         return self.get_queryset().active().search(query)
+
 
 class Contact(models.Model):
     first_name = models.CharField(_("First name"), max_length=255)
@@ -63,7 +85,7 @@ class Contact(models.Model):
         return u'%s' % self.full_name
 
     def get_absolute_url(self):
-        return reverse('contact:detail', args=(self.uuid,))
+        return reverse('contact_detail', args=[self.id])
 
     # @models.permalink
     # def get_update_url(self):
