@@ -2,10 +2,10 @@
 
 {% block page_title %}
     {% if object is not None %}
-        <p>
-            View Contacts> <span class="alert-link">{{ object.full_name }}</span> created '
-            {{ object.created_on|timesince }} ago '
-        </p>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'contacts:list' %}">Contacts</a></li>
+            <li class="breadcrumb-item active">{{ object.first_name }} {{ object.last_name }}</li>
+        </ol>
     {% else %}
         Contact Not Found!
     {% endif %}
@@ -46,10 +46,6 @@
                 <th scope="row">Is Active:</th>
                 <td>{{ object.is_active }}</td>
             </tr>
-            <tr>
-                <th scope="row">UUID:</th>
-                <td>{{ object.uuid }}</td>
-            </tr>
             </tbody>
         </table>
         {#                {% if object.image %}#}
@@ -65,8 +61,10 @@
         {#                {% endif %}#}
         {#            </div>#}
         <div class="text-center">
-            <a href="#" class="btn btn-info">Edit</a>
-            <a href="{% url 'contacts:delete' id=object.id %}" class="btn btn-danger" style="margin-left: 10px">Remove contact</a>
+            <a href="{% url 'contacts:edit' id=object.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'contacts:delete' id=object.id %}" class="btn btn-danger" style="margin-left: 10px">Remove
+                contact</a>
+            <a href="{% url 'contacts:list' %}" class="btn btn-info" style="margin-left: 10px">Back</a>
         </div>
     {% endif %}
 {% endblock %}

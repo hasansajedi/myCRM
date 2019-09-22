@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'contacts:list' %}">Contacts</a></li>
+        <li class="breadcrumb-item active">Update Details> <span class="alert-link">{{ contact.full_name }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <form method="POST" class="post-form" action="{% url 'contacts:update' id=contact.id %}">
+        {% csrf_token %}
+        <div class="container">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">First Name:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="first_name" id="id_first_name" required maxlength="20"
+                           value="{{ contact.first_name }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Last Name:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="last_name" id="id_last_name" required maxlength="100"
+                           value="{{ contact.last_name }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Email:</label>
+                <div class="col-sm-4">
+                    <input type="email" name="email" id="id_email" required maxlength="254"
+                           value="{{ contact.email }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Phone:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="phone" id="id_phone" required maxlength="15"
+                           value="{{ contact.phone }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Address:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="address" id="id_address" required maxlength="15"
+                           value="{{ contact.address }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Description:</label>
+                <div class="col-sm-4">
+                    <textarea name="description" cols="40" rows="10" id="id_description">
+                        {{ contact.description }}
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Active:</label>
+                <div class="col-sm-4">
+                    <input type="checkbox" name="is_active" id="id_is_active" required
+                           checked="{{ contact.is_active }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <a href="{% url 'contacts:list' %}" class="btn btn-danger"
+                   style="margin-left: 10px">Cancel</a>
+                </div>
+            </div>
+        </div>
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </form>
+{% endblock %}

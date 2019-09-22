@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'contacts:list' %}">Contacts</a></li>
+        <li class="breadcrumb-item active">Available contacts: <span class="alert-link">{{ contacts|length }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    {% if request.GET.updated is not None %}
+        {% if request.GET.updated == 'true' %}
+            <div class="alert alert-success" role="alert">User has been updated successfully.</div>
+        {% elif request.GET.updated == 'false' %}
+            <div class="alert alert-danger" role="alert">Error in updating user has been occured.</div>
+        {% endif %}
+    {% endif %}
+    {% if request.GET.deleted is not None %}
+        {% if request.GET.deleted == 'true' %}
+            <div class="alert alert-success" role="alert">User has been removed successfully.</div>
+        {% elif request.GET.deleted == 'false' %}
+            <div class="alert alert-danger" role="alert">Error in removing user has been occured.</div>
+        {% endif %}
+    {% endif %}
+    <div class="row justify-content-md-center">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Filter</h5>
+                <div class="card-text">
+                    <form action="{% url 'contacts:search' %}" method="post" class="post-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="form_group_search_input" name="form_group_search_input"
+                                   placeholder="Enter your keyword">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </form>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="/contacts/emp" class="card-link">Add New Record</a></li>
+                <li class="list-group-item"><a href="/contacts/emp" class="card-link">Show all contacts</a></li>
+                <li class="list-group-item"><a href="/contacts/emp" class="card-link">Show only active contacts</a></li>
+            </ul>
+        </div>
+        <div class="col">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Creator</th>
+                    <th scope="col">Created on</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">#</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in contacts %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ row.full_name }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.created_by }}</td>
+                        <td>{{ row.created_on|timesince }} ago</td>
+                        <td>
+                            {% if row.is_active %}
+                                Active
+                            {% else %}
+                                Deactive
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'contacts:edit' id=row.id %}"><span class="btn btn-success">Edit</span></a>
+                            <a href="{% url 'contacts:delete' id=row.id %}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            {% if is_paginated %}
+                <hr>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            {% if not search %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% url 'contacts:list' %}?page={{ page_obj.previous_page_number }}"
+                                       tabindex="-1">Previous</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% url 'contacts:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
+                                       tabindex="-1">Previous</a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        {% endif %}
+                        {% for object in page_obj.paginator.page_range %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{% url 'contacts:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            {% if not search %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% url 'contacts:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% url 'contacts:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

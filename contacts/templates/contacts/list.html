@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block page_title %}
-    Available contacts: <span class="alert-link">{{ object_list|length }}</span>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'contacts:list' %}">Contacts</a></li>
+        <li class="breadcrumb-item active">Available contacts: <span class="alert-link">{{ object_list|length }}</span>
+        </li>
+    </ol>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +37,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'contacts:contact_detail' pk=obj.id %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'contacts:view' id=obj.id %}" class="btn btn-primary">View</a>
                     <a href="{% url 'contacts:delete' id=obj.id %}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>

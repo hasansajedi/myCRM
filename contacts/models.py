@@ -41,6 +41,21 @@ class ContactManager(models.Manager):
         else:
             return False
 
+    def update_by_id(self, id, first_name, last_name, email, phone, address, description, is_active):
+        qs = Contact.objects.get(id=id)
+        if qs is not None:
+            qs.first_name = first_name
+            qs.last_name = last_name
+            qs.email = email
+            qs.phone = phone
+            qs.address = address
+            qs.description = description
+            qs.is_active = is_active
+            qs.save()
+            return True
+        else:
+            return False
+
     def remove_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
         if qs.count() == 1:
@@ -53,7 +68,6 @@ class ContactManager(models.Manager):
 
     def search(self, query):
         return self.get_queryset().active().search(query)
-
 
 class Contact(models.Model):
     first_name = models.CharField(_("First name"), max_length=255)

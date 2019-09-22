@@ -40,7 +40,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="{{ "contacts:list" }}">Contacts</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'contacts:list' %}">Contacts</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Tasks</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Invoices</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Events</a></li>
@@ -58,11 +58,9 @@
 </nav>
 
 <div class="container-fluid">
-    <div class="w-100">
-        <div class="alert alert-dark" role="alert">
-            {% block page_title %}{% endblock %}
-        </div>
-    </div>
+    <nav aria-label="breadcrumb">
+        {% block page_title %}{% endblock %}
+    </nav>
 
     <div class="w-100">
         {% block content %}{% endblock %}
