@@ -1,0 +1,80 @@
+{% extends "companies/index.html" %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Companies</a></li>
+        <li class="breadcrumb-item active">Add new company</li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    <form method="POST" class="post-form" action="{% url 'companies:new' %}">
+        {% csrf_token %}
+        <div class="container">
+            <br>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Company Name:</label>
+                <div class="col-sm-4">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Manager Name:</label>
+                <div class="col-sm-4">
+                    {{ form.manager_name }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Website:</label>
+                <div class="col-sm-4">
+                    {{ form.website }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Email:</label>
+                <div class="col-sm-4">
+                    {{ form.email }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Phone number:</label>
+                <div class="col-sm-4">
+                    {{ form.phone }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Address:</label>
+                <div class="col-sm-4">
+                    {{ form.address }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Description:</label>
+                <div class="col-sm-4">
+                    {{ form.description }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Status:</label>
+                <div class="col-sm-4">
+                    {{ form.is_active }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{% url 'companies:list' %}" class="btn btn-danger"
+                       style="margin-left: 10px">Cancel</a>
+                </div>
+            </div>
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

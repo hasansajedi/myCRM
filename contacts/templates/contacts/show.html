@@ -23,38 +23,52 @@
             <div class="alert alert-danger" role="alert">Error in removing user has been occured.</div>
         {% endif %}
     {% endif %}
-    <div class="row justify-content-md-center">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Filter</h5>
-                <div class="card-text">
-                    <form action="{% url 'contacts:search' %}" method="post" class="post-form">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="form_group_search_input" name="form_group_search_input"
-                                   placeholder="Enter your keyword">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Apply</button>
-                    </form>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filter</h5>
+                    <div class="card-text">
+                        <form action="{% url 'contacts:search' %}" method="post" class="post-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="form_group_search_input"
+                                       name="form_group_search_input"
+                                       placeholder="Enter your keyword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Apply</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="/contacts/emp" class="card-link">Add New Record</a></li>
-                <li class="list-group-item"><a href="/contacts/emp" class="card-link">Show all contacts</a></li>
-                <li class="list-group-item"><a href="/contacts/emp" class="card-link">Show only active contacts</a></li>
-            </ul>
+            <div class="card">
+                <div class="card-body">
+{#                    <h5 class="card-title">Card title</h5>#}
+                    <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><a href="{% url 'contacts:new' %}" class="card-link">Add New Record</a>
+                            </li>
+                            <li class="list-group-item"><a href="{% url 'contacts:list' %}" class="card-link">Show all contacts(<b>{{ contacts|length }}</b>)</a>
+                            </li>
+                            <li class="list-group-item"><a href="/contacts?show_active=true" class="card-link">Show active contacts(<b>{{ active_count }}</b>)</a>
+                            </li>
+                            <li class="list-group-item"><a href="/contacts?show_deleted=true" class="card-link">Show deleted contacts(<b>{{ deleted_count }}</b>)</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
+
+        <div class="col-sm-9">
             <table class="table table-bordered">
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Creator</th>
-                    <th scope="col">Created on</th>
                     <th scope="col">Status</th>
-                    <th scope="col">#</th>
+                    <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -63,8 +77,6 @@
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>{{ row.full_name }}</td>
                         <td>{{ row.email }}</td>
-                        <td>{{ row.created_by }}</td>
-                        <td>{{ row.created_on|timesince }} ago</td>
                         <td>
                             {% if row.is_active %}
                                 Active

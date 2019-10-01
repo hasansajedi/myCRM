@@ -1,0 +1,74 @@
+{% extends "tasks/index.html" %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'tasks:list' %}">Tasks</a></li>
+        <li class="breadcrumb-item active">Add new task</li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    <form method="POST" class="post-form" action="{% url 'tasks:new' %}">
+        {% csrf_token %}
+        <div class="container">
+            <br>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Title:</label>
+                <div class="col-sm-4">
+                    {{ form.title }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Company:</label>
+                <div class="col-sm-4">
+                    {{ form.company }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Status:</label>
+                <div class="col-sm-4">
+                    {{ form.status }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Priority:</label>
+                <div class="col-sm-4">
+                    {{ form.priority }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Task type:</label>
+                <div class="col-sm-4">
+                    {{ form.task_type }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Due date:</label>
+                <div class="col-sm-4">
+                    {{ form.due_date }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Is active:</label>
+                <div class="col-sm-4">
+                    {{ form.is_active }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{% url 'tasks:list' %}" class="btn btn-danger"
+                       style="margin-left: 10px">Cancel</a>
+                </div>
+            </div>
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

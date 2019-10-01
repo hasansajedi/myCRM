@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    {% if object is not None %}
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Comany</a></li>
+            <li class="breadcrumb-item active">{{ object.name }}</li>
+        </ol>
+    {% else %}
+        Comany Not Found!
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if object is not None %}
+        <div class="card">
+            <div id="module" class="w-100">
+                <h3>{{ object.name }}</h3>
+                <div class="collapse" id="collapseExample" aria-expanded="false">
+                    <p>{{ object.description }}</p>
+                    <p class="h5"><span class="badge badge-secondary">Manager Name:</span> {{ object.manager_name }}
+                        <span class="badge badge-secondary">Website:</span> {{ object.website }}
+                        <span class="badge badge-secondary">email:</span> {{ object.email }}
+                        <span class="badge badge-secondary">phone:</span> {{ object.phone }}</p>
+                    <p class="h5"><span class="badge badge-secondary">address:</span> {{ object.address }}
+                        <span class="badge badge-secondary">created_by:</span> {{ object.created_by }}
+                        <span class="badge badge-secondary">address:</span> {{ object.address }}
+                        <span class="badge badge-secondary">createdon:</span> {{ object.createdon }}</p>
+                </div>
+                <a role="button" class="collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false"
+                   aria-controls="collapseExample"></a>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <h5 class="card-header">List of tasks</h5>
+            <ul class="list-group list-group-flush">
+                {% for item in tasks %}
+                    <li class="list-group-item">
+                        <span class="badge badge-secondary">{{ item.created_by }}</span>
+                        <span class="badge badge-primary badge-pill">{{ item.due_date }}</span>
+                        {{ item }}
+                        <span class="badge badge-{% if item.status == 'New' %}warning {% elif item.status == 'In Progress' %}primary {% elif item.status == 'Completed' %}success {% endif %} badge-pill float-right">{{ item.status }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary">
+                    <ion-icon name="download"></ion-icon>
+                    Download report</a>
+            </div>
+        </div>
+
+
+    {% endif %}
+{% endblock %}

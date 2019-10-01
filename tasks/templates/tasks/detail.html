@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    {% if object is not None %}
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
+            <li class="breadcrumb-item active">{{ object.first_name }} {{ object.last_name }}</li>
+        </ol>
+    {% else %}
+        Contact Not Found!
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if object is not None %}
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <th scope="row">First Name:</th>
+                <td>{{ object.first_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Last Name:</th>
+                <td>{{ object.last_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Email:</th>
+                <td>{{ object.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Phone:</th>
+                <td>{{ object.phone }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Address:</th>
+                <td>{{ object.address }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Description:</th>
+                <td>{{ object.description }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Created by:</th>
+                <td>{{ object.created_by }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Is Active:</th>
+                <td>{{ object.is_active }}</td>
+            </tr>
+            </tbody>
+        </table>
+        {#                {% if object.image %}#}
+        {#                    <img src='{{ object.image.url }}' class="img-fluid"/>#}
+        {#                {% endif %}#}
+
+        {#            <div class="col-12 col-md-6">#}
+        {#                {% include 'products/snippets/update-cart.html' with product=object cart=cart %}#}
+        {#                {% if object in cart.products.all %}#}
+        {#                In cart <button class="btn btn-link">Remove?</button>#}
+        {#                {% else %}#}
+        {#                    <button class="btn btn-success">Add to cart</button>#}
+        {#                {% endif %}#}
+        {#            </div>#}
+        <div class="text-center">
+            <a href="{% url 'companies:edit' id=object.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'companies:delete' id=object.id %}" class="btn btn-danger" style="margin-left: 10px">Remove
+                contact</a>
+            <a href="{% url 'companies:list' %}" class="btn btn-info" style="margin-left: 10px">Back</a>
+        </div>
+    {% endif %}
+{% endblock %}

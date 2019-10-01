@@ -22,13 +22,11 @@
         </tr>
         </thead>
         <tbody>
-        {% for obj in object_list %}
+        {% for obj in contacts %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ obj.full_name }}</td>
                 <td>{{ obj.email }}</td>
-                <td>{{ obj.created_by }}</td>
-                <td>{{ obj.created_on|timesince }} ago</td>
                 <td>
                     {% if obj.is_active %}
                         Active
@@ -37,8 +35,8 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'contacts:view' id=obj.id %}" class="btn btn-primary">View</a>
-                    <a href="{% url 'contacts:delete' id=obj.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'companies:view' id=obj.id %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'companies:delete' id=obj.id %}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         {% endfor %}
@@ -52,12 +50,12 @@
                     {% if not search %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'contacts:list' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                               href="{% url 'companies:list' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
                         </li>
                     {% else %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'contacts:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
+                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
                                tabindex="-1">Previous</a>
                         </li>
                     {% endif %}
@@ -68,18 +66,18 @@
                 {% endif %}
                 {% for object in page_obj.paginator.page_range %}
                     <li class="page-item"><a class="page-link"
-                                             href="{% url 'contacts:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                                             href="{% url 'companies:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
                     </li>
                 {% endfor %}
                 {% if page_obj.has_next %}
                     {% if not search %}
                         <li class="page-item">
-                            <a class="page-link" href="{% url 'contacts:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="page-link" href="{% url 'companies:list' %}?page={{ page_obj.next_page_number }}">Next</a>
                         </li>
                     {% else %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'contacts:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
+                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
                         </li>
                     {% endif %}
                 {% else %}

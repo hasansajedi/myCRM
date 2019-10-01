@@ -1,0 +1,27 @@
+#module {
+  width: 500px;
+}
+
+#module a.collapsed:after {
+  content: '+ Show More';
+}
+
+#module a:not(.collapsed):after {
+  content: '- Show Less';
+}
+
+#module #collapseExample.collapse:not(.show) {
+  display: block;
+  /* height = lineheight * no of lines to display */
+  height: 3.5em;
+  overflow: hidden;
+}
+
+#module #collapseExample.collapsing {
+  height: 3.5em;
+}
+
+.nounderline {
+  text-decoration: none !important
+
+}

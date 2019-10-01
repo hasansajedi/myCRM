@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filter</h5>
+                    <div class="card-text">
+                        <form action="{% url 'companies:search' %}" method="post" class="post-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="form_group_search_input"
+                                       name="form_group_search_input"
+                                       placeholder="Enter your keyword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Apply</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{{ 'companies:new' }}" class="card-link">
+                                    Add New Company
+                                </a>
+                            </li>
+                            <li class="list-group-item"><a href="{% url 'companies:list' %}" class="card-link">Show all
+                                companies(<b>{{ companies|length }}</b>)</a>
+                            </li>
+                            <li class="list-group-item"><a href="/companies?show_active=true" class="card-link">Show
+                                active companies(<b>{{ active_count }}</b>)</a>
+                            </li>
+                            <li class="list-group-item"><a href="/companies?show_deleted=true" class="card-link">Show
+                                deleted companies(<b>{{ deleted_count }}</b>)</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="card">
+                {% block sub_content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -4,117 +4,17 @@ from django.views.generic import ListView, DetailView, View, UpdateView
 
 from contacts.forms import ContactForm
 from contacts.models import ContactManager
-from .mixins import ObjectViewedMixin
 from django.http import Http404
 from .models import Contact
 
 
-class ContactListView(ListView):
-    model = Contact
-    paginate_by = 10
-    queryset = Contact.objects.all()
-    template_name = "contacts/list.html"
-
-    def get_queryset(self, *args, **kwargs):
-        if self.kwargs:
-            return Contact.objects.filter(category=self.kwargs['category']).order_by('-created_on')
-        else:
-            query = Contact.objects.all().order_by('-created_on')
-            return query
-
-
-class ContactDetailSlugView(ObjectViewedMixin, DetailView):
-    queryset = Contact.objects.all()
-    template_name = "contacts/detail.html"
-
-    def get_context_data(self, *args, **kwargs):
-        request = self.request
-        context = super(ContactDetailSlugView, self).get_context_data(*args, **kwargs)
-        return context
-
-    def get_object(self, *args, **kwargs):
-        request = self.request
-        id = self.kwargs.get('id')
-        try:
-            instance = Contact.objects.get(id=id, is_active=True)
-        except Contact.DoesNotExist:
-            raise Http404("Not found...")
-        except Contact.MultipleObjectsReturned:
-            qs = Contact.objects.filter(id=id, is_active=True)
-            instance = qs.first()
-        except:
-            raise Http404("Hmmmmmmm")
-
-        return instance
-
-
-class ContactDetailSlugEdit(ObjectViewedMixin, DetailView):
-    queryset = Contact.objects.all()
-    template_name = "contacts/snippets/edit.html"
-
-    # def get_context_data(self, *args, **kwargs):
-    #     request = self.request
-    #     context = super(ContactDetailSlugEdit, self).get_context_data(*args, **kwargs)
-    #     return context
-
-    def get_object(self, *args, **kwargs):
-        request = self.request
-        id = self.kwargs.get('id')
-        try:
-            instance = Contact.objects.get(id=id, is_active=True)
-        except Contact.DoesNotExist:
-            raise Http404("Not found...")
-        except Contact.MultipleObjectsReturned:
-            qs = Contact.objects.filter(id=id, is_active=True)
-            instance = qs.first()
-        except:
-            raise Http404("Hmmmmmmm")
-
-        # return instance
-        return render(request, 'contacts/snippets/edit.html', {'object': instance})
-
-
-def delete_contact(request, id):
-    query = ContactManager.disable_by_id(ContactManager, id=id)
-    print(query)
-    return HttpResponse("Deleted!")
-
-
-def editcontact(request, id):
-    instance = ''
-    try:
-        instance = Contact.objects.get(id=id, is_active=True)
-    except Contact.DoesNotExist:
-        raise Http404("Not found...")
-    except Contact.MultipleObjectsReturned:
-        qs = Contact.objects.filter(id=id, is_active=True)
-        instance = qs.first()
-    except:
-        raise Http404("Hmmmmmmm")
-
-    form = ContactForm(request.POST or None)
-    context = {'form': form, 'object': instance}
-    if form.is_valid():
-        obj = form.save(commit=False)
-        obj.save()
-        # messages.success(request, "You successfully updated the post")
-        context = {'form': form}
-        return render(request, 'contacts/snippets/edit.html', context)
-
-    else:
-        context = {'form': form,
-                   'object': instance,
-                   'error': 'The form was not updated successfully. Please enter in a title and content'}
-        return render(request, 'contacts/snippets/edit.html', context)
-
-
-def emp(request):
+def new(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
             try:
                 form.save()
-                return redirect('/contacts/list.html')
+                return redirect('/contacts')
             except:
                 pass
         else:
@@ -126,9 +26,26 @@ def emp(request):
 
 
 def show(request):
-    paginate_by = 2
     contacts = Contact.objects.all()
-    return render(request, "contacts/show.html", {'contacts': contacts})
+    active_count = contacts.filter(is_active=True).__len__()
+    deleted_count = contacts.filter(deleted=True).__len__()
+
+    show_deleted = (request.GET.get('show_deleted'))
+    if show_deleted == 'true':
+        deleted_contacts = contacts.filter(deleted=True)
+        return render(request, "contacts/show.html", {'contacts': deleted_contacts,
+                                                      'active_count': active_count,
+                                                      'deleted_count': deleted_count})
+    show_active = (request.GET.get('show_active'))
+    if show_active == 'true':
+        show_active = contacts.filter(is_active=True, deleted=False)
+        return render(request, "contacts/show.html", {'contacts': show_active,
+                                                      'active_count': active_count,
+                                                      'deleted_count': deleted_count})
+
+    return render(request, "contacts/show.html", {'contacts': contacts,
+                                                  'active_count': active_count,
+                                                  'deleted_count': deleted_count})
 
 
 def search(request):
@@ -147,7 +64,7 @@ def update(request, id):
     form = ContactForm(request.POST, instance=contact)
     if form.is_valid():
         form.save()
-        return redirect("/contacts/show?updated=true")
+        return redirect("/contacts?updated=true")
     else:
         err = form.errors
         return render(request, 'contacts/edit.html', {'contact': contact, 'errors': err})
@@ -157,6 +74,6 @@ def update(request, id):
 def destroy(request, id):
     query = ContactManager.disable_by_id(ContactManager, id=id)
     if query:
-        return redirect("/contacts/show?deleted=true")
+        return redirect("/contacts?deleted=true")
     else:
-        return redirect("/contacts/show?deleted=false")
+        return redirect("/contacts?deleted=false")

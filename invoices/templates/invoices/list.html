@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
+        <li class="breadcrumb-item active">Available contacts: <span class="alert-link">{{ object_list|length }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Status</th>
+            <th scope="col">#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in object_list %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ obj.full_name }}</td>
+                <td>{{ obj.email }}</td>
+                <td>{{ obj.created_by }}</td>
+                <td>{{ obj.created_on|timesince }} ago</td>
+                <td>
+                    {% if obj.is_active %}
+                        Active
+                    {% else %}
+                        Deactive
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'companies:view' id=obj.id %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'companies:delete' id=obj.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+        <hr>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    {% if not search %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for object in page_obj.paginator.page_range %}
+                    <li class="page-item"><a class="page-link"
+                                             href="{% url 'companies:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    {% if not search %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'companies:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+{% endblock %}

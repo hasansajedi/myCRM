@@ -6,6 +6,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models import Q
 from shortuuidfield import ShortUUIDField
 
+from .utils import ContactsIndex
+
 
 class ContactQuerySet(models.query.QuerySet):
     def active(self):
@@ -68,6 +70,7 @@ class ContactManager(models.Manager):
 
     def search(self, query):
         return self.get_queryset().active().search(query)
+
 
 class Contact(models.Model):
     first_name = models.CharField(_("First name"), max_length=255)

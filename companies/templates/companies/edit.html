@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Companies</a></li>
+        <li class="breadcrumb-item active">Update Details> <span class="alert-link">{{ company.name }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <form method="POST" class="post-form" action="{% url 'companies:update' id=company.id %}">
+        {% csrf_token %}
+        <div class="container">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="name" id="id_name" required maxlength="20"
+                           value="{{ company.name }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Manager Name:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="manager_name" id="id_manager_name" required maxlength="100"
+                           value="{{ company.manager_name }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Website:</label>
+                <div class="col-sm-4">
+                    <input type="url" name="website" id="id_website" required maxlength="254"
+                           value="{{ company.website }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Email:</label>
+                <div class="col-sm-4">
+                    <input type="email" name="email" id="id_email" required maxlength="254"
+                           value="{{ company.email }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Phone:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="phone" id="id_phone" required maxlength="15"
+                           value="{{ company.phone }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Address:</label>
+                <div class="col-sm-4">
+                    <input type="text" name="address" id="id_address" required maxlength="15"
+                           value="{{ company.address }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Description:</label>
+                <div class="col-sm-4">
+                    <textarea name="description" cols="40" rows="10" id="id_description">
+                        {{ company.description }}
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Active:</label>
+                <div class="col-sm-4">
+                    <input type="checkbox" name="is_active" id="id_is_active" required
+                           checked="{{ company.is_active }}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <a href="{% url 'companies:list' %}" class="btn btn-danger"
+                       style="margin-left: 10px">Cancel</a>
+                </div>
+            </div>
+        </div>
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </form>
+{% endblock %}

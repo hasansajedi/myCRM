@@ -2,14 +2,14 @@
 
 {% block page_title %}
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'contacts:list' %}">Contacts</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
         <li class="breadcrumb-item active">Update Details> <span class="alert-link">{{ contact.full_name }}</span>
         </li>
     </ol>
 {% endblock %}
 
 {% block content %}
-    <form method="POST" class="post-form" action="{% url 'contacts:update' id=contact.id %}">
+    <form method="POST" class="post-form" action="{% url 'companies:update' id=contact.id %}">
         {% csrf_token %}
         <div class="container">
             <div class="form-group row">

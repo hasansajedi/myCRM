@@ -3,7 +3,7 @@
 {% block page_title %}
     {% if object is not None %}
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'contacts:list' %}">Contacts</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
             <li class="breadcrumb-item active">{{ object.first_name }} {{ object.last_name }}</li>
         </ol>
     {% else %}

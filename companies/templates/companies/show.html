@@ -1,0 +1,213 @@
+{% extends 'companies/index.html' %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
+        <li class="breadcrumb-item active">Available contacts: <span class="alert-link">{{ companies|length }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    {% if request.GET.updated is not None %}
+        {% if request.GET.updated == 'true' %}
+            <div class="alert alert-success" role="alert">Company has been updated successfully.</div>
+        {% elif request.GET.updated == 'false' %}
+            <div class="alert alert-danger" role="alert">Error in updating company has been occured.</div>
+        {% endif %}
+    {% endif %}
+    {% if request.GET.deleted is not None %}
+        {% if request.GET.deleted == 'true' %}
+            <div class="alert alert-success" role="alert">Company has been removed successfully.</div>
+        {% elif request.GET.deleted == 'false' %}
+            <div class="alert alert-danger" role="alert">Error in removing company has been occured.</div>
+        {% endif %}
+    {% endif %}
+
+
+    <table class="table table-info">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in companies %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    <a href="{% url 'companies:detail' id=row.id %}">{{ row.name }}</a>
+                </td>
+                <td>{{ row.email }}</td>
+                <td>
+                    {% if row.is_active %}
+                        Active
+                    {% else %}
+                        Deactive
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModal">
+                        Edit
+                    </button>
+                    <!-- Modal Edit -->
+                    <div class="modal fade bd-example-modal-xl" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Company</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" class="post-form"
+                                          action="{% url 'companies:update' id=row.id %}">
+                                        {% csrf_token %}
+                                        <div class="container">
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Name:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="name" id="id_name" required
+                                                           maxlength="20"
+                                                           value="{{ row.name }}"/>
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Manager Name:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="manager_name" id="id_manager_name"
+                                                           required maxlength="100"
+                                                           value="{{ row.manager_name }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Website:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="url" name="website" id="id_website" required
+                                                           maxlength="254"
+                                                           value="{{ row.website }}"/>
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Email:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="email" name="email" id="id_email" required
+                                                           maxlength="254"
+                                                           value="{{ row.email }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Phone:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="phone" id="id_phone" required
+                                                           maxlength="15"
+                                                           value="{{ row.phone }}"/>
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Address:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="address" id="id_address" required
+                                                           maxlength="15"
+                                                           value="{{ row.address }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Description:</label>
+                                                <div class="col-sm-4">
+                                                            <textarea name="description" cols="40" rows="5"
+                                                                      id="id_description">
+                                                                {{ row.description }}
+                                                            </textarea>
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Active:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="is_active" id="id_is_active"
+                                                           required
+                                                           checked="{{ row.is_active }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-1 col-form-label"></label>
+                                                <div class="col-sm-4">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if form.errors %}
+                                            {% for field in form %}
+                                                {% for error in field.errors %}
+                                                    {{ error|escape }}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </form>
+                                </div>
+                                {#                                        <div class="modal-footer">#}
+                                {#                                        </div>#}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'companies:delete' id=row.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% if is_paginated %}
+        <hr>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    {% if not search %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?page={{ page_obj.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for object in page_obj.paginator.page_range %}
+                    <li class="page-item"><a class="page-link"
+                                             href="{% url 'companies:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    {% if not search %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
