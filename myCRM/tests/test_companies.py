@@ -14,7 +14,7 @@ class CompanyTest(TestCase):
 
     def test_whatever_creation(self):
         w = self.create_company(name="only a test", manager_name="test manager", website="https://www.test.com",
-                                 email="info@test.com", phone="+989140526532", address="test address",
-                                 description="test desciption", created_by=None, is_active=True, deleted=False)
+                                email="info@test.com", phone="+989140526532", address="test address",
+                                description="test desciption", created_by=None, is_active=True, deleted=False)
         self.assertTrue(isinstance(w, Company))
         self.assertEqual(w.__unicode__(), w.name)

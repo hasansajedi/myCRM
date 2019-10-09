@@ -8,7 +8,6 @@ import shortuuidfield.fields
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -30,8 +29,10 @@ class Migration(migrations.Migration):
                 ('createdon', models.DateTimeField(auto_now_add=True, verbose_name='Created on')),
                 ('is_active', models.BooleanField(default=True)),
                 ('deleted', models.BooleanField(default=False, null=True)),
-                ('uuid', shortuuidfield.fields.ShortUUIDField(blank=True, editable=False, max_length=22, null=True, unique=True)),
-                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='company_created_by', to=settings.AUTH_USER_MODEL)),
+                ('uuid', shortuuidfield.fields.ShortUUIDField(blank=True, editable=False, max_length=22, null=True,
+                                                              unique=True)),
+                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                                 related_name='company_created_by', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['-createdon'],
