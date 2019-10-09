@@ -1,11 +1,8 @@
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, View, UpdateView
+from django.shortcuts import render, redirect
 
 from tasks.models import Task
 from .forms import InvoiceForm
-from django.http import Http404
 from .models import Invoice, InvoiceManager
 
 INVOICE_STATUS = Invoice.INVOICE_STATUS

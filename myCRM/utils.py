@@ -6,8 +6,10 @@ random_string_generator is located here:
 http://joincfe.com/blog/random-string-generator-in-python/
 '''
 
+
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
-    return ''.join(random.choice(chars) for _  in range(size))
+    return ''.join(random.choice(chars) for _ in range(size))
+
 
 def unique_order_id_generator(instance):
     order_new_id = random_string_generator()
@@ -17,6 +19,7 @@ def unique_order_id_generator(instance):
     if qs_exists:
         return unique_slug_generator(instance, new_slug=new_slug)
     return order_new_id
+
 
 def unique_slug_generator(instance, new_slug=None):
     """
@@ -32,8 +35,8 @@ def unique_slug_generator(instance, new_slug=None):
     qs_exists = Klass.objects.filter(slug=slug).exists()
     if qs_exists:
         new_slug = "{slug}-{randstr}".format(
-                    slug=slug,
-                    randstr=random_string_generator(size=4)
-                )
+            slug=slug,
+            randstr=random_string_generator(size=4)
+        )
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug
