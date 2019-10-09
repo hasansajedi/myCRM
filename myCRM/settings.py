@@ -26,6 +26,8 @@ INSTALLED_APPS = [
 
     'phonenumber_field',
     'coverage',
+    'flake',
+    'pytest',
 
     'crm',
     'contacts',
