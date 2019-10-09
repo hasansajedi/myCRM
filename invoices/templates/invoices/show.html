@@ -1,9 +1,9 @@
-{% extends 'companies/index.html' %}
+{% extends 'invoices/index.html' %}
 
 {% block page_title %}
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
-        <li class="breadcrumb-item active">Available contacts: <span class="alert-link">{{ companies|length }}</span>
+        <li class="breadcrumb-item"><a href="{% url 'invoices:list' %}">Invoices</a></li>
+        <li class="breadcrumb-item active">Available invoice: <span class="alert-link">{{ invoices|length }}</span>
         </li>
     </ol>
 {% endblock %}
@@ -11,45 +11,43 @@
 {% block sub_content %}
     {% if request.GET.updated is not None %}
         {% if request.GET.updated == 'true' %}
-            <div class="alert alert-success" role="alert">Company has been updated successfully.</div>
+            <div class="alert alert-success" role="alert">Invoices has been updated successfully.</div>
         {% elif request.GET.updated == 'false' %}
             <div class="alert alert-danger" role="alert">Error in updating company has been occured.</div>
         {% endif %}
     {% endif %}
     {% if request.GET.deleted is not None %}
         {% if request.GET.deleted == 'true' %}
-            <div class="alert alert-success" role="alert">Company has been removed successfully.</div>
+            <div class="alert alert-success" role="alert">Invoices has been removed successfully.</div>
         {% elif request.GET.deleted == 'false' %}
             <div class="alert alert-danger" role="alert">Error in removing company has been occured.</div>
         {% endif %}
     {% endif %}
 
 
-    <table class="table table-info">
+    <table class="table table-light">
         <thead class="thead-light">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
+            <th scope="col">Invoice Title</th>
+            <th scope="col">Invoice Number</th>
             <th scope="col">Email</th>
             <th scope="col">Status</th>
+            <th scope="col">Created On</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for row in companies %}
-            <tr>
+        {% for row in invoices %}
+            <tr class="{% if row.status == 'Paid' %}table-success{% elif row.status == 'Draft' %}{% elif row.status == 'Sent' %}table-info{% elif row.status == 'Pending' %}table-warning{% elif row.status == 'Cancelled' %}table-danger{% endif %}">
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>
-                    <a href="{% url 'companies:detail' id=row.id %}">{{ row.name }}</a>
+                    <a href="{% url 'invoices:detail' id=row.id %}">{{ row.invoice_title }}</a>
                 </td>
+                <td>{{ row.invoice_number }}</td>
                 <td>{{ row.email }}</td>
-                <td>
-                    {% if row.is_active %}
-                        Active
-                    {% else %}
-                        Deactive
-                    {% endif %}
-                </td>
+                <td>{{ row.status }}</td>
+                <td>{{ row.created_on }}</td>
                 <td>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -63,14 +61,14 @@
                         <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edit Company</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Invoices</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <form method="POST" class="post-form"
-                                          action="{% url 'companies:update' id=row.id %}">
+                                          action="{% url 'invoices:update' id=row.id %}">
                                         {% csrf_token %}
                                         <div class="container">
                                             <div class="form-group row">
@@ -155,7 +153,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{% url 'companies:delete' id=row.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'invoices:delete' id=row.id %}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         {% endfor %}
@@ -170,13 +168,13 @@
                     {% if not search %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'companies:list' %}?page={{ page_obj.previous_page_number }}"
+                               href="{% url 'invoices:list' %}?page={{ page_obj.previous_page_number }}"
                                tabindex="-1">Previous</a>
                         </li>
                     {% else %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
+                               href="{% url 'invoices:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
                                tabindex="-1">Previous</a>
                         </li>
                     {% endif %}
@@ -187,19 +185,19 @@
                 {% endif %}
                 {% for object in page_obj.paginator.page_range %}
                     <li class="page-item"><a class="page-link"
-                                             href="{% url 'companies:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                                             href="{% url 'invoices:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
                     </li>
                 {% endfor %}
                 {% if page_obj.has_next %}
                     {% if not search %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'companies:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                               href="{% url 'invoices:list' %}?page={{ page_obj.next_page_number }}">Next</a>
                         </li>
                     {% else %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'companies:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
+                               href="{% url 'invoices:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
                         </li>
                     {% endif %}
                 {% else %}

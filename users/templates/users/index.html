@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filter</h5>
+                    <div class="card-text">
+                        <form action="{% url 'users:search' %}" method="post" class="post-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="form_group_search_input"
+                                       name="form_group_search_input"
+                                       placeholder="Enter your keyword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Apply</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{% url 'users:new' %}" class="card-link">
+                                    Add new user
+                                </a>
+                            </li>
+                            <li class="list-group-item"><a href="{% url 'users:list' %}" class="card-link">All users(<b>{{ users|length }}</b>)</a>
+                            </li>
+                            <li class="list-group-item"><a href="/users?show_active=true" class="card-link">Active users(<b>{{ active_count }}</b>)</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="card">
+                {% block sub_content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

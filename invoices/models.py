@@ -5,7 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 from common.models import Address
 from common.utils import CURRENCY_CODES
 from phonenumber_field.modelfields import PhoneNumberField
-from django.contrib.auth.models import User
+from users.models import User
+
+from companies.models import Company
 
 
 class InvoiceQuerySet(models.query.QuerySet):
@@ -43,13 +45,13 @@ class InvoiceManager(models.Manager):
             return False
 
     def update_by_id(self, id, invoice_title, invoice_number, from_address, to_address, name, email, quantity, rate,
-                     total_amount, currency, phone, amount_due, amount_paid, is_email_sent, status, details, due_date):
+                     total_amount, currency, phone, amount_due, amount_paid, is_email_sent, status, details, due_date, company):
         qs = Invoice.objects.get(id=id)
         if qs is not None:
             qs.invoice_title = invoice_title
             qs.invoice_number = invoice_number
-            qs.from_address = from_address
-            qs.to_address = to_address
+            # qs.from_address = from_address
+            # qs.to_address = to_address
             qs.name = name
             qs.email = email
             qs.quantity = quantity
@@ -63,6 +65,7 @@ class InvoiceManager(models.Manager):
             qs.status = status
             qs.details = details
             qs.due_date = due_date
+            qs.company = company
             qs.save()
             return True
         else:
@@ -93,8 +96,6 @@ class Invoice(models.Model):
 
     invoice_title = models.CharField(_('Invoice Title'), max_length=50)
     invoice_number = models.CharField(_('Invoice Number'), max_length=50)
-    from_address = models.ForeignKey(Address, related_name='invoice_from_address', on_delete=models.SET_NULL, null=True)
-    to_address = models.ForeignKey(Address, related_name='invoice_to_address', on_delete=models.SET_NULL, null=True)
     name = models.CharField(_('Name'), max_length=100)
     email = models.EmailField(_('Email'))
     # assigned_to = models.ManyToManyField(User, related_name='invoice_assigned_to')
@@ -107,19 +108,15 @@ class Invoice(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY_CODES, blank=True, null=True)
     phone = PhoneNumberField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='invoice_created_by',
-                                   on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey(User, related_name='invoice_created_by', on_delete=models.SET_NULL, null=True)
 
-    amount_due = models.DecimalField(
-        blank=True, null=True, max_digits=12, decimal_places=2)
-    amount_paid = models.DecimalField(
-        blank=True, null=True, max_digits=12, decimal_places=2)
+    amount_due = models.DecimalField(blank=True, null=True, max_digits=12, decimal_places=2)
+    amount_paid = models.DecimalField(blank=True, null=True, max_digits=12, decimal_places=2)
     is_email_sent = models.BooleanField(default=False)
-    status = models.CharField(choices=INVOICE_STATUS,
-                              max_length=15, default="Draft")
+    status = models.CharField(choices=INVOICE_STATUS, max_length=15, default="Draft")
     details = models.TextField(_('Details'), null=True, blank=True)
     due_date = models.DateField(blank=True, null=True)
-
+    company = models.ForeignKey(Company, null=True, related_name="companies_invoices", on_delete=models.CASCADE)
     # accounts = models.ManyToManyField(Account, related_name='accounts_invoices')
     # teams = models.ManyToManyField(Teams, related_name='invoices_teams')
 

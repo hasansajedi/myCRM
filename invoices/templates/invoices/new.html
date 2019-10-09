@@ -1,33 +1,35 @@
-{% extends "companies/index.html" %}
+{% extends "invoices/index.html" %}
 
 {% block page_title %}
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Companies</a></li>
-        <li class="breadcrumb-item active">Add new company</li>
+        <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">invoices</a></li>
+        <li class="breadcrumb-item active">Add new invoice</li>
     </ol>
 {% endblock %}
 
 {% block sub_content %}
-    <form method="POST" class="post-form" action="{% url 'companies:new' %}">
+    <form method="POST" class="post-form" action="{% url 'invoices:new' %}">
         {% csrf_token %}
         <div class="container">
             <br>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Company Name:</label>
+                <label class="col-sm-2 col-form-label">Invoice title:</label>
+                <div class="col-sm-4">
+                    {{ form.invoice_title }}
+                </div>
+                <label class="col-sm-2 col-form-label">Invoice number:</label>
+                <div class="col-sm-4">
+                    {{ form.invoice_number }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Company:</label>
+                <div class="col-sm-4">
+                    {{ form.company }}
+                </div>
+                <label class="col-sm-2 col-form-label">Name:</label>
                 <div class="col-sm-4">
                     {{ form.name }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Manager Name:</label>
-                <div class="col-sm-4">
-                    {{ form.manager_name }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Website:</label>
-                <div class="col-sm-4">
-                    {{ form.website }}
                 </div>
             </div>
             <div class="form-group row">
@@ -35,36 +37,52 @@
                 <div class="col-sm-4">
                     {{ form.email }}
                 </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Phone number:</label>
+                <label class="col-sm-2 col-form-label">Phone:</label>
                 <div class="col-sm-4">
                     {{ form.phone }}
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Address:</label>
-                <div class="col-sm-4">
-                    {{ form.address }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Description:</label>
-                <div class="col-sm-4">
-                    {{ form.description }}
-                </div>
-            </div>
-            <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Status:</label>
                 <div class="col-sm-4">
-                    {{ form.is_active }}
+                    {{ form.status }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Quantity:</label>
+                <div class="col-sm-4">
+                    {{ form.quantity }}
+                </div>
+                <label class="col-sm-2 col-form-label">Rate:</label>
+                <div class="col-sm-4">
+                    {{ form.rate }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Total_amount:</label>
+                <div class="col-sm-4">
+                    {{ form.total_amount }}
+                </div>
+                <label class="col-sm-2 col-form-label">Currency:</label>
+                <div class="col-sm-4">
+                    {{ form.currency }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Details:</label>
+                <div class="col-sm-4">
+                    {{ form.details }}
+                </div>
+                <label class="col-sm-2 col-form-label">Due date:</label>
+                <div class="col-sm-4">
+                    {{ form.due_date }}
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-1 col-form-label"></label>
                 <div class="col-sm-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="{% url 'companies:list' %}" class="btn btn-danger"
+                    <a href="{% url 'invoices:list' %}" class="btn btn-danger"
                        style="margin-left: 10px">Cancel</a>
                 </div>
             </div>

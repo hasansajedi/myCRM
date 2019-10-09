@@ -25,11 +25,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'phonenumber_field',
+    'coverage',
 
     'crm',
     'contacts',
     'companies',
     'tasks',
+    'invoices',
+    'common',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -41,8 +45,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'myCRM.urls'
 
 TEMPLATES = [
     {
@@ -124,3 +126,10 @@ ELASTICSEARCH_DSL = {
         'hosts': '127.0.0.1:8000'
     },
 }
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
+
+LOGIN_URL = '/login/'
+ROOT_URLCONF = 'myCRM.urls'
+AUTH_USER_MODEL = 'users.User'

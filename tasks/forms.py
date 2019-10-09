@@ -4,7 +4,9 @@ from .models import Task
 
 class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        # self.created_by = kwargs.pop('user')
         super(TaskForm, self).__init__(*args, **kwargs)
+
         for field in self.fields.values():
             field.widget.attrs = {"class": "form-control"}
 
@@ -14,6 +16,7 @@ class TaskForm(forms.ModelForm):
         self.fields['task_type'].required = True
         self.fields['priority'].required = True
         self.fields['due_date'].required = False
+        # self.fields['created_by'].initial = self.created_by
 
     def clean_title(self):
         title = self.cleaned_data.get('title')

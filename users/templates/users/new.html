@@ -1,0 +1,83 @@
+{% extends "users/index.html" %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'users:list' %}">Users</a></li>
+        <li class="breadcrumb-item active">Add new user</li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    <form method="POST" class="post-form" action="{% url 'users:new' %}">
+        {% csrf_token %}
+        <div class="container">
+            <br>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">email:</label>
+                <div class="col-sm-4">
+                    {{ form.email }}
+                </div>
+                <label class="col-sm-2 col-form-label">username:</label>
+                <div class="col-sm-4">
+                    {{ form.username }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">password:</label>
+                <div class="col-sm-4">
+                    {{ form.password }}
+                </div>
+                <label class="col-sm-2 col-form-label">password1:</label>
+                <div class="col-sm-4">
+                    {{ form.password1 }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">first_name:</label>
+                <div class="col-sm-4">
+                    {{ form.first_name }}
+                </div>
+                <label class="col-sm-2 col-form-label">last_name:</label>
+                <div class="col-sm-4">
+                    {{ form.last_name }}
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label class="col-sm-2 col-form-label">date_joined:</label>
+                <div class="col-sm-4">
+                    {{ form.date_joined }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">is_superuser:</label>
+                <div class="col-sm-4">
+                    {{ form.is_superuser }}
+                </div>
+                <label class="col-sm-2 col-form-label">is_staff:</label>
+                <div class="col-sm-4">
+                    {{ form.is_staff }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">is_active:</label>
+                <div class="col-sm-4">
+                    {{ form.is_active }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{% url 'tasks:list' %}" class="btn btn-danger"
+                       style="margin-left: 10px">Cancel</a>
+                </div>
+            </div>
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

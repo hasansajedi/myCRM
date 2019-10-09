@@ -25,13 +25,14 @@
     {% endif %}
 
 
-    <table class="table table-info">
+    <table class="table table-light">
         <thead class="thead-light">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Status</th>
+            <th scope="col">Created by</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -50,6 +51,7 @@
                         Deactive
                     {% endif %}
                 </td>
+                <td>{{ row.created_by }}</td>
                 <td>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal"

@@ -15,6 +15,7 @@ class InvoiceForm(forms.ModelForm):
             field.required = False
 
         # self.fields["teams"].required = False
+        self.fields['invoice_number'].widget.attrs.update({'placeholder': 'inv-001'})
         self.fields['phone'].widget.attrs.update({'placeholder': '+91-123-456-7890'})
         self.fields['invoice_title'].required = True
         self.fields['invoice_number'].required = True
@@ -22,7 +23,6 @@ class InvoiceForm(forms.ModelForm):
         self.fields['email'].required = True
         self.fields['total_amount'].required = True
         self.fields['due_date'].required = True
-        self.fields['accounts'].required = False
 
     def clean_quantity(self):
         quantity = self.cleaned_data.get('quantity')
@@ -41,7 +41,8 @@ class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
         fields = ('invoice_title', 'invoice_number',
-                  'from_address', 'to_address', 'name',
+                  # 'from_address', 'to_address',
+                  'name', 'company',
                   'email', 'phone', 'status',
                   'quantity', 'rate', 'total_amount',
                   'currency', 'details', 'due_date'

@@ -43,16 +43,20 @@
             </div>
             <div class="card">
                 <div class="card-body">
-{#                    <h5 class="card-title">Card title</h5>#}
+                    {#                    <h5 class="card-title">Card title</h5>#}
                     <div class="card-text">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><a href="{% url 'contacts:new' %}" class="card-link">Add New Record</a>
+                            <li class="list-group-item"><a href="{% url 'contacts:new' %}" class="card-link">Add New
+                                Record</a>
                             </li>
-                            <li class="list-group-item"><a href="{% url 'contacts:list' %}" class="card-link">Show all contacts(<b>{{ contacts|length }}</b>)</a>
+                            <li class="list-group-item"><a href="{% url 'contacts:list' %}" class="card-link">Show all
+                                contacts(<b>{{ contacts|length }}</b>)</a>
                             </li>
-                            <li class="list-group-item"><a href="/contacts?show_active=true" class="card-link">Show active contacts(<b>{{ active_count }}</b>)</a>
+                            <li class="list-group-item"><a href="/contacts?show_active=true" class="card-link">Show
+                                active contacts(<b>{{ active_count }}</b>)</a>
                             </li>
-                            <li class="list-group-item"><a href="/contacts?show_deleted=true" class="card-link">Show deleted contacts(<b>{{ deleted_count }}</b>)</a>
+                            <li class="list-group-item"><a href="/contacts?show_deleted=true" class="card-link">Show
+                                deleted contacts(<b>{{ deleted_count }}</b>)</a>
                             </li>
                         </ul>
                     </div>
@@ -68,6 +72,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Created by</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -84,6 +89,7 @@
                                 Deactive
                             {% endif %}
                         </td>
+                        <td>{{ row.created_by }}</td>
                         <td>
                             <a href="{% url 'contacts:edit' id=row.id %}"><span class="btn btn-success">Edit</span></a>
                             <a href="{% url 'contacts:delete' id=row.id %}" class="btn btn-danger">Delete</a>

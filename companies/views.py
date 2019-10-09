@@ -14,6 +14,8 @@ def new(request):
         form = CompanyForm(request.POST)
         if form.is_valid():
             try:
+                form = form.save(commit=False)
+                form.created_by = request.user
                 form.save()
                 return redirect('/companies/')
             except:

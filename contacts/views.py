@@ -13,6 +13,8 @@ def new(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             try:
+                form = form.save(commit=False)
+                form.created_by = request.user
                 form.save()
                 return redirect('/contacts')
             except:

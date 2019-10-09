@@ -5,14 +5,34 @@
         <div class="col-sm-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Filter</h5>
+                    <h5 class="card-title">
+                        <ion-icon name="options"></ion-icon>
+                        Filter
+                    </h5>
                     <div class="card-text">
-                        <form action="{% url 'companies:search' %}" method="post" class="post-form">
+                        <form action="{% url 'invoices:search' %}" method="get" class="post-form" value="{{ request.GET.q }}">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" id="form_group_search_input"
-                                       name="form_group_search_input"
-                                       placeholder="Enter your keyword">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Key</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="form_group_search_input"
+                                               name="form_group_search_input"
+                                               placeholder="Enter your keyword">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Status</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" id="form_group_status_input"
+                                                name="form_group_status_input">
+                                            <option value=""></option>
+                                            {% for key, value in INVOICE_STATUS %}
+                                                <option value="{{ key }}">{{ key }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Apply</button>
                         </form>
@@ -24,18 +44,14 @@
                     <div class="card-text">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                <a href="{{ 'companies:new' }}" class="card-link">
-                                    Add New Company
+                                <a href="{% url 'invoices:new' %}" class="card-link">
+                                    <ion-icon name="add-circle"></ion-icon>
+                                    Add New Invoices
                                 </a>
                             </li>
-                            <li class="list-group-item"><a href="{% url 'companies:list' %}" class="card-link">Show all
-                                companies(<b>{{ companies|length }}</b>)</a>
-                            </li>
-                            <li class="list-group-item"><a href="/companies?show_active=true" class="card-link">Show
-                                active companies(<b>{{ active_count }}</b>)</a>
-                            </li>
-                            <li class="list-group-item"><a href="/companies?show_deleted=true" class="card-link">Show
-                                deleted companies(<b>{{ deleted_count }}</b>)</a>
+                            <li class="list-group-item"><a href="{% url 'invoices:list' %}" class="card-link">
+                                <ion-icon name="eye"></ion-icon>
+                                Show all invoices(<b>{{ invoices|length }}</b>)</a>
                             </li>
                         </ul>
                     </div>

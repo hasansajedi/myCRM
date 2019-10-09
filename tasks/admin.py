@@ -9,5 +9,10 @@ class CompanyAdmin(admin.ModelAdmin):
     class Meta:
         model = Task
 
+    def save_model(self, request, obj, form, change):
+        obj.created_by = request.user
+        super().save_model(request, obj, form, change)
+
 
 admin.site.register(Task, CompanyAdmin)
+

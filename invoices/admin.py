@@ -4,7 +4,7 @@ from .models import Invoice
 
 
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'invoice_title', 'invoice_number', 'from_address', 'to_address', 'name', 'email']
+    list_display = ['__str__', 'invoice_title', 'invoice_number', 'name', 'email']
 
     class Meta:
         model = Invoice
