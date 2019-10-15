@@ -41,6 +41,12 @@ class CompanyManager(models.Manager):
         else:
             return False
 
+    def create_company(self, name, manager_name, website, email, phone, address, description, created_by, is_active,
+                       deleted, uuid, createdon):
+        qs = Company(name, manager_name, website, email, phone, address, description, created_by,
+                                            is_active, deleted, uuid, createdon)
+        qs.save()
+
     def update_by_id(self, id, name, manager_name, website, email, phone, address, description, is_active):
         qs = Company.objects.get(id=id)
         if qs is not None:

@@ -25,9 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'phonenumber_field',
-    'coverage',
-    'flake',
     'pytest',
+    'pytest_django',
 
     'crm',
     'contacts',
