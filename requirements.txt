@@ -2,3 +2,4 @@ Django==2.2.8
 django-phonenumber-field
 pytest
 pytest_django
+phonenumbers
