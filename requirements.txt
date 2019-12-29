@@ -3,3 +3,4 @@ django-phonenumber-field
 pytest
 pytest_django
 phonenumbers
+django-shortuuidfield
