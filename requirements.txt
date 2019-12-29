@@ -4,3 +4,4 @@ pytest
 pytest_django
 phonenumbers
 django-shortuuidfield
+elasticsearch_dsl
