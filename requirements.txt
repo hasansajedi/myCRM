@@ -6,3 +6,4 @@ phonenumbers
 django-shortuuidfield
 xlwt
 arrow
+xhtml2pdf
