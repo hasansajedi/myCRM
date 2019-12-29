@@ -6,7 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models import Q
 from shortuuidfield import ShortUUIDField
 
-from .utils import ContactsIndex
+# from .utils import ContactsIndex
 
 
 class ContactQuerySet(models.query.QuerySet):
