@@ -1,70 +1,121 @@
-{% extends "base.html" %}
+{% extends "users/index.html" %}
 
 {% block page_title %}
     {% if object is not None %}
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'companies:list' %}">Contacts</a></li>
-            <li class="breadcrumb-item active">{{ object.first_name }} {{ object.last_name }}</li>
+            {#            <li class="breadcrumb-item"><a href="{% url 'users:list' %}">Users</a></li>#}
+            <li class="breadcrumb-item active">Edit profile <span
+                    class="badge badge-warning">{{ object.username }}</span></li>
         </ol>
     {% else %}
-        Contact Not Found!
+        User Not Found!
     {% endif %}
 {% endblock %}
-{% block content %}
-    {% if object is not None %}
-        <table class="table table-bordered">
-            <tbody>
-            <tr>
-                <th scope="row">First Name:</th>
-                <td>{{ object.first_name }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Last Name:</th>
-                <td>{{ object.last_name }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Email:</th>
-                <td>{{ object.email }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Phone:</th>
-                <td>{{ object.phone }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Address:</th>
-                <td>{{ object.address }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Description:</th>
-                <td>{{ object.description }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Created by:</th>
-                <td>{{ object.created_by }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Is Active:</th>
-                <td>{{ object.is_active }}</td>
-            </tr>
-            </tbody>
-        </table>
-        {#                {% if object.image %}#}
-        {#                    <img src='{{ object.image.url }}' class="img-fluid"/>#}
-        {#                {% endif %}#}
-
-        {#            <div class="col-12 col-md-6">#}
-        {#                {% include 'products/snippets/update-cart.html' with product=object cart=cart %}#}
-        {#                {% if object in cart.products.all %}#}
-        {#                In cart <button class="btn btn-link">Remove?</button>#}
-        {#                {% else %}#}
-        {#                    <button class="btn btn-success">Add to cart</button>#}
-        {#                {% endif %}#}
-        {#            </div>#}
-        <div class="text-center">
-            <a href="{% url 'companies:edit' id=object.id %}" class="btn btn-primary">Edit</a>
-            <a href="{% url 'companies:delete' id=object.id %}" class="btn btn-danger" style="margin-left: 10px">Remove
-                contact</a>
-            <a href="{% url 'companies:list' %}" class="btn btn-info" style="margin-left: 10px">Back</a>
+{% block sub_content %}
+    <div class="container">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit user information</h5>
         </div>
-    {% endif %}
+        {% if object is not None %}
+            <form method="POST" class="post-form" action="{% url 'users:update' id=object.id %}">
+                {% csrf_token %}
+                <div class="container mt-3">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">First Name:</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="first_name" id="id_first_name" maxlength="20"
+                                   value="{{ object.first_name }}"/>
+                        </div>
+                        <label class="col-sm-2 col-form-label">Last Name:</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="last_name" id="id_last_name" maxlength="100"
+                                   value="{{ object.last_name }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Username:</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" name="username" id="id_username" required maxlength="254"
+                                   value="{{ object.username }}"/>
+                        </div>
+                        <label class="col-sm-2 col-form-label">Email:</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="email" name="email" id="id_email" required maxlength="254"
+                                   value="{{ object.email }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Password:</label>
+                        <div class="input-group col-sm-4" id="show_hide_password">
+                            <input disabled class="form-control" type="password" value="{{ object.password }}">
+                            <div class="input-group-addon">
+                                <a href="">
+                                    <ion-icon name="eye"></ion-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">is_superuser:</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="checkbox" name="is_superuser" id="id_is_superuser"
+                                   required
+                                   checked="{{ object.is_superuser }}"/>
+                        </div>
+                        <label class="col-sm-2 col-form-label">is_staff:</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="checkbox" name="is_staff" id="id_is_staff" required
+                                   checked="{{ object.is_staff }}"/>
+                        </div>
+                        <label class="col-sm-2 col-form-label">is_active:</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="checkbox" name="is_active" id="id_is_active" required
+                                   checked="{{ object.is_active }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Joined date:</label>
+                        <div class="col-sm-4">
+                            <span name="date_joined" id="id_date_joined" class="badge badge-success">
+                                {{ object.date_joined }}
+                            </span>
+                        </div>
+                        <label class="col-sm-2 col-form-label">Last login date:</label>
+                        <div class="col-sm-4">
+                            <span name="date_joined" id="id_date_joined" class="badge badge-success">
+                                {{ object.last_login }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-1 col-form-label"></label>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-success">Update</button>
+                            <a href="{% url 'users:list' %}" class="btn btn-danger"
+                               style="margin-left: 10px">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                {% if errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ errors }}
+                    </div>
+                {% endif %}
+            </form>
+        {% endif %}
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#show_hide_password a").on('click', function (event) {
+                event.preventDefault();
+                if ($('#show_hide_password input').attr("type") == "text") {
+                    $('#show_hide_password input').attr('type', 'password');
+                    $('#show_hide_password ion-icon').attr("name", "eye-off");
+                } else if ($('#show_hide_password input').attr("type") == "password") {
+                    $('#show_hide_password input').attr('type', 'text');
+                    $('#show_hide_password ion-icon').attr("name", "eye");
+                }
+            });
+        });
+    </script>
 {% endblock %}

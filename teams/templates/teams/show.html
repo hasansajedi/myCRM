@@ -1,0 +1,76 @@
+{% extends 'teams/index.html' %}
+{% load to_dash %}
+{% load static %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'tasks:list' %}">Teams</a></li>
+        <li class="breadcrumb-item active">Available teams: <span class="alert-link">{{ tasks|length }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    {% include "need/check_query.html" %}
+    {% if errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ errors }}
+        </div>
+    {% endif %}
+    <table class="table table-light">
+        <thead class="thead-light">
+        <tr>
+            <th width="5%">ID</th>
+            <th width="5%">Team Name</th>
+            <th width="15%">Team Description</th>
+            <th width="10%">Assigned To</th>
+            <th width="5%">Created by</th>
+            <th width="5%">Created On</th>
+            <th width="10%">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for team in teams %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    {% if team.picture %}
+                        <img src="{{ team.picture.url }}" alt="{{ team.name }}" class="img-rounded" style="width: 20px" />
+                    {% else %}
+                        <img src="/media/teams/default.jpg" alt="{{ team.name }}" class="img-rounded" style="width: 20px" />
+                    {% endif %}
+                    {{ team.name }}
+                </td>
+                <td>
+                    {% if team.description %}
+                        {{ team.description }}
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+                <td>
+                    {% with users=team.users.all %}
+                        {% for user in users %}
+                            <a href="{% url 'users:profile' username=user.username %}">{{ user.email }}</a>
+                        {% empty %}
+                            None
+                        {% endfor %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {{ team.created_by }}
+                </td>
+                <td title="{{ team.created_on }}"><span style="font-size: 10px">{{ team.created_on_arrow }}</span></td>
+                <td style="width:  12%" class="actions">
+                    {% include "teams/team_edit.html" with object=team %}
+                    <a href="{% url 'teams:delete' id=team.id %}" class="btn btn-danger">
+                        <ion-icon name="close" style="color: #fff"></ion-icon>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% include "teams/pagination.html" with page=teams %}
+{% endblock %}

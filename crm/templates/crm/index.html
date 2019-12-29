@@ -1,67 +1,165 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if messages %}
+        <ul class="ontop">
+            {% for message in messages %}
+                <li{% if message.tags %} class="list-group-item {{ message.tags }}"{% endif %}>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <strong>Holy guacamole!</strong> {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <div class="row mt-1">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
+            <ul class="list-group">
+                {% for item in tasks_flow %}
+                    <li class="d-flex">
+                        <div class="alert alert-dark">
+                            <div class="modal-header ml-0 mr-0 p-1">
+                                <h6 style="font-size: 12px" class="modal-title" id="exampleModalLongTitle">Task
+                                    from {{ item.transferred_by }}</h6>
+                                <div class="float-right">
+                                    <a class="text-success" alt="I did this."
+                                       href="{% url 'crm:has_been_seen' id=item.id %}"><i
+                                            class="fa fa-check-circle fa-lg"></i></a>
+                                </div>
+                            </div>
+                            <div class="modal-body mt-0 mb-0 p-1">
+                                <p data-toggle="tooltip" data-placement="top"
+                                   title="{{ item.description }}"
+                                   class="text-break">{{ item.description|truncatechars:70 }}</p>
+                            </div>
+                            <div class="modal-footer mt-0 mb-0 p-1">
+                                <span style="font-size: 10px">{{ item.created_on }}</span>
+                            </div>
+                        </div>
+
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-10">
             <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Today tasks</h5>
-                    <div class="card-text">
-                        <ul class="list-group">
-                            {% for item in today_tasks %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ item.title }}
-                                    <span class="badge badge-primary badge-pill"><a class="text-decoration-none text-white"
-                                            href="{% url 'companies:detail' id=item.id %}">{{ item.company }}</a></span>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                <div class="row mt-1">
+                    <div class="col-sm-2">
+                        <a href="{% url 'contacts:list' %}" class="text-decoration-none">
+                            <div class="card text-white bg-primary mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Contacts</h5>
+                                    <div class="card-text">
+                                        <h2 class="display-3">{{ contacts_count }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <a href="{% url 'contacts:list' %}" class="text-decoration-none">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Contacts</h5>
-                        <div class="card-text">
-                            <h2 class="display-3">{{ contacts_count }}</h2>
+                    <div class="col-sm-2">
+                        <a href="{% url 'companies:list' %}" class="text-decoration-none">
+                            <div class="card text-white bg-secondary mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Companies</h5>
+                                    <div class="card-text">
+                                        <h2 class="display-3">{{ companies_count }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{% url 'tasks:list' %}" class="text-decoration-none">
+                            <div class="card text-white bg-success mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Tasks</h5>
+                                    <div class="card-text">
+                                        <h2 class="display-3">{{ tasks_count }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card text-white bg-info mb-3">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Invoices</h5>
+                                <div class="card-text">
+                                    <h2 class="display-3">{{ invoices_count }}</h2>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-sm-2">
-            <a href="{% url 'companies:list' %}" class="text-decoration-none">
-                <div class="card text-white bg-secondary mb-3">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Companies</h5>
-                        <div class="card-text">
-                            <h2 class="display-3">{{ companies_count }}</h2>
-                        </div>
+                    <div class="col-sm-2">
+                        <a href="{% url 'teams:list' %}" class="text-decoration-none">
+                            <div class="card text-white bg-primary mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Teams</h5>
+                                    <div class="card-text">
+                                        <h2 class="display-3">{{ teams_count }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{% url 'contacts:list' %}" class="text-decoration-none">
+                            <div class="card text-white bg-primary mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Events</h5>
+                                    <div class="card-text">
+                                        <h2 class="display-3">{{ events_count }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            </a>
-        </div>
-        <div class="col-sm-2">
-            <a href="{% url 'tasks:list' %}" class="text-decoration-none">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Tasks</h5>
-                        <div class="card-text">
-                            <h2 class="display-3">{{ tasks_count }}</h2>
+                <div class="row mt-1">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Today tasks</h5>
+                                <div class="card-text">
+                                    <ul class="list-group">
+                                        {% if today_tasks %}
+                                            {% for item in today_tasks %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ item.title }}
+                                                    <span class="badge badge-primary badge-pill"><a
+                                                            class="text-decoration-none text-white"
+                                                            href="{% url 'companies:detail' id=item.id %}">{{ item.company }}</a></span>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p>You haven't any task to do today.</p>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-sm-2">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Invoices</h5>
-                    <div class="card-text">
-                        <h2 class="display-3">{{ invoices_count }}</h2>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Last tasks</h5>
+                                <div class="card-text">
+                                    <ul class="list-group">
+                                        {% for item in last_tasks %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span data-toggle="tooltip" data-placement="top"
+                                                      title="{{ item.title }}">{{ item.title|truncatewords:6 }}</span>
+                                                <span class="badge badge-primary badge-pill">{{ item.due_date }}</span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,41 +169,9 @@
     <div class="row mt-1">
         <div class="col-sm-4">
             <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Last tasks</h5>
-                    <div class="card-text">
-                        <ul class="list-group">
-                            {% for item in last_tasks %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ item.title|truncatewords:6 }}
-                                    <span class="badge badge-primary badge-pill">{{ item.due_date }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
+
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Today tasks</h5>
-                    <div class="card-text">
-                        <ul class="list-group">
-                            {% for item in today_tasks %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ item.title }}
-                                    <span class="badge badge-primary badge-pill">{{ item.company }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-            </div>
-        </div>
+
     </div>
 {% endblock %}

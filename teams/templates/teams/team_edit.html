@@ -1,0 +1,67 @@
+<a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{ object.id }}">
+    <ion-icon name="create" style="color: #fff"></ion-icon>
+</a>
+<!-- Modal Edit -->
+<div class="modal fade bd-example-modal-lg" id="exampleModal{{ object.id }}" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel{{ object.id }}"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel{{ object.id }}">Edit team</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if object is not None %}
+                    <form method="POST" class="post-form"
+                          action="{% url 'teams:update' id=object.id %}">
+                        {% csrf_token %}
+                        <div class="container">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Name:</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="name" id="id_name" required
+                                           maxlength="20" class="form-control"
+                                           value="{{ object.name }}"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Description:</label>
+                                <div class="col-sm-4">
+                                <textarea name="description" id="id_description" required
+                                          maxlength="20" class="form-control"
+                                          value="{{ object.description }}">{{ object.description }}</textarea>
+                                </div>
+                            </div>
+{#                            <div class="form-group row">#}
+{#                                <b>Members:</b>#}
+{#                                <ul>#}
+{#                                    {% for user in object.users.all %}#}
+{#                                        <li>{{ user }}</li>#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+{#                            </div>#}
+                            <div class="form-group row">
+                                <select name="users" id="id_users" class="form-control" size="{{ object.users|length }}" multiple>
+                                    {% for user in users %}
+                                        <option value="{{ user }}" {% if user in object.users.all %}selected{% endif %}>
+                                            {{ user }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Close
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+            {#                                        <div class="modal-footer">#}
+            {#                                        </div>#}
+        </div>
+    </div>
+</div>

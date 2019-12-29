@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'invoices',
     'common',
     'users',
+    'teams',
+    'events',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -114,12 +116,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_my_proj"), ]
+# STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", "static_root")
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_my_proj"), ]
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", "static_root")
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "static_cdn", "media_root")
 
 ELASTICSEARCH_DSL = {
     'default': {

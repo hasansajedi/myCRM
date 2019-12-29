@@ -1,0 +1,56 @@
+{% extends "tasks/index.html" %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'tasks:list' %}">Tasks</a></li>
+        <li class="breadcrumb-item active">Add new task</li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    <form method="POST" class="post-form" action="{% url 'teams:new' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container">
+            <br>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name: {% if form.users.field.required %}
+                    <span class="error_marker" style="color:red">*</span>{% endif %}</label></label>
+                <div class="col-sm-4">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">description: {% if form.users.field.required %}
+                    <span class="error_marker" style="color:red">*</span>{% endif %}</label></label>
+                <div class="col-sm-4">
+                    {{ form.description }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">users:</label></label>
+                <div class="col-sm-4">
+                    {{ form.users }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Picture:</label></label>
+                <div class="col-sm-4">
+                    {{ form.picture }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{% url 'teams:list' %}" class="btn btn-danger"
+                       style="margin-left: 10px">Cancel</a>
+                </div>
+            </div>
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

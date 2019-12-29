@@ -1,0 +1,193 @@
+{% extends 'tasks/index.html' %}
+{% load to_dash %}
+
+{% block page_title %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'tasks:list' %}">User tasks</a></li>
+        <li class="breadcrumb-item active">Available tasks: <span class="alert-link">{{ tasks|length }}</span>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block sub_content %}
+    <table class="table table-light">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Due date</th>
+            <th scope="col">Created by</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in tasks %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ row.title }}</td>
+                <td>{{ row.status }}</td>
+                <td>{{ row.priority }}</td>
+                <td>{{ row.due_date }}</td>
+                <td>{{ row.created_by }}</td>
+                <td style="width:  12%">
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModal">
+                        <ion-icon name="create"></ion-icon>
+                    </button>
+                    <!-- Modal Edit -->
+                    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Company</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" class="post-form"
+                                          action="{% url 'tasks:update' id=row.id %}">
+                                        {% csrf_token %}
+                                        <div class="container">
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Title:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="title" id="id_title" required
+                                                           maxlength="20" class="form-control"
+                                                           value="{{ row.title }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Status:</label>
+                                                <div class="col-sm-4">
+                                                    <select name="status" class="form-control" required=""
+                                                            id="id_status">
+                                                        {% for key, value in STATUS_CHOICES %}
+                                                            <option value="{{ key }}"
+                                                                    {% if row.status == key %}selected="selected"{% endif %}>
+                                                                {{ key }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Priority:</label>
+                                                <div class="col-sm-4">
+                                                    <select name="priority" class="form-control" required=""
+                                                            id="id_priority">
+                                                        {% for key, value in PRIORITY_CHOICES %}
+                                                            <option value="{{ key }}"
+                                                                    {% if key == row.priority %}selected="selected"{% endif %}>
+                                                                {{ key }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Priority:</label>
+                                                <div class="col-sm-4">
+                                                    <select name="priority" class="form-control" required=""
+                                                            id="id_priority">
+                                                        {% for key, value in PRIORITY_CHOICES %}
+                                                            <option value="{{ key }}"
+                                                                    {% if key == row.priority %}selected="selected"{% endif %}>
+                                                                {{ key }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Due date:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="date" name="due_date" id="id_due_date" required
+                                                           maxlength="254" class="form-control"
+                                                           value="{{ row.due_date|to_dash }}">
+                                                </div>
+                                                <label class="col-sm-2 col-form-label">Active:</label>
+                                                <div class="col-sm-4">
+                                                    <input class="form-control" type="checkbox" name="is_active"
+                                                           id="id_is_active"
+                                                           required
+                                                           checked="{{ row.is_active }}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if form.errors %}
+                                            {% for field in form %}
+                                                {% for error in field.errors %}
+                                                    {{ error|escape }}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </form>
+                                </div>
+                                {#                                        <div class="modal-footer">#}
+                                {#                                        </div>#}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'tasks:delete' id=row.id %}" class="btn btn-danger">
+                        <ion-icon name="close"></ion-icon>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% if is_paginated %}
+        <hr>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    {% if not search %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'tasks:list' %}?page={{ page_obj.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'tasks:list' %}?{{ search }}&page={{ page_obj.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for object in page_obj.paginator.page_range %}
+                    <li class="page-item"><a class="page-link"
+                                             href="{% url 'tasks:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    {% if not search %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'tasks:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'tasks:list' %}?{{ search }}&page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}

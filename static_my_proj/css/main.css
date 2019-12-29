@@ -1,22 +1,30 @@
 #module {
-  width: 500px;
+    width: 500px;
 }
 
 #module a.collapsed:after {
-  content: '+ Show More';
+    content: '+ Show More';
 }
 
 #module a:not(.collapsed):after {
-  content: '- Show Less';
+    content: '- Show Less';
 }
 
 #module #collapseExample.collapse:not(.show) {
-  display: block;
-  /* height = lineheight * no of lines to display */
-  height: 3.5em;
-  overflow: hidden;
+    display: block;
+    /* height = lineheight * no of lines to display */
+    height: 3.5em;
+    overflow: hidden;
 }
 
 #module #collapseExample.collapsing {
-  height: 3.5em;
+    height: 3.5em;
+}
+
+.ontop {
+    background-color: rgba(219, 88, 96, 0.9);
+    position: absolute;
+    top: 0;
+    margin: auto;
+    z-index: 9999;
 }

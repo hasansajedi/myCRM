@@ -1,0 +1,21 @@
+{% if request.GET.updated is not None %}
+    {% if request.GET.updated == 'true' %}
+        <div class="alert alert-success" role="alert">Record has been updated successfully.</div>
+    {% else %}
+        <div class="alert alert-danger" role="alert">Error in updating record has been occured.</div>
+    {% endif %}
+{% endif %}
+{% if request.GET.deleted is not None %}
+    {% if request.GET.deleted == 'true' %}
+        <div class="alert alert-success" role="alert">Record has been removed successfully.</div>
+    {% else %}
+        <div class="alert alert-danger" role="alert">Error in removing record has been occured.</div>
+    {% endif %}
+{% endif %}
+{% if request.GET.transferred is not None %}
+    {% if request.GET.transferred == 'true' %}
+        <div class="alert alert-success" role="alert">Record has been transferred successfully.</div>
+    {% else %}
+        <div class="alert alert-danger" role="alert">Error in transferring record has been occured.</div>
+    {% endif %}
+{% endif %}

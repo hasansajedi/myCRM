@@ -7,10 +7,12 @@ from .views import (
     update,
     destroy,
     search,
+    show_profile,
 )
 
 urlpatterns = [
     path(r'', show, name='list'),
+    path(r'profile/<username>', show_profile, name='profile'),
     path(r'new/', new, name='new'),
     path(r'edit/<int:id>', edit, name='edit'),
     path(r'update/<int:id>', update, name='update'),

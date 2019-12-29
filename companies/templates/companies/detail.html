@@ -37,6 +37,10 @@
                 {% for item in tasks %}
                     <li class="list-group-item">
                         <span class="badge badge-secondary">{{ item.created_by }}</span>
+                        {% if item.functor is not None %}
+                            <a href="{% url 'tasks:usertasks' username=item.functor %}"><span class="badge badge-primary badge-pill"><ion-icon name="walk"></ion-icon>
+                                {{ item.functor }}</span></a>
+                        {% endif %}
                         <span class="badge badge-primary badge-pill">{{ item.due_date }}</span>
                         {{ item }}
                         <span class="badge badge-{% if item.status == 'New' %}warning {% elif item.status == 'In Progress' %}primary {% elif item.status == 'Completed' %}success {% endif %} badge-pill float-right">{{ item.status }}</span>

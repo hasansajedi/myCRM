@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Title</title>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 14px;
+        }
+
+        .header {
+            font-size: 20px;
+            font-weight: 100;
+            text-align: center;
+            color: #007cae;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 100;
+            /* text-align: right;*/
+            padding: 10px 20px 0px 20px;
+        }
+
+        .title span {
+            color: #007cae;
+        }
+
+        .details {
+            padding: 10px 0 0 0;
+            text-align: left !important;
+        }
+
+        .hrItem {
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: #333; /* old IE */
+            background-color: #fff; /* Modern Browsers */
+        }
+
+        h4, .h4 {
+            font-size: 26px;
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+
+    <div class='header'>
+        <p class="h4">Workflow #{{ task }} </p>
+    </div>
+</div>
+<ul>
+    {% for item in data %}
+        <li class='details'>
+            <span class="h4">{{ forloop.counter }}. </span>
+            Created on: <span>{{ item.created_on }}</span> |
+            Transferred by: <span style="font-weight: bold; float: right !important;">{{ item.transferred_by }}</span>
+            <p>{{ item.description }}</p>
+            <hr class='hrItem'/>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
