@@ -5,3 +5,4 @@ pytest_django
 phonenumbers
 django-shortuuidfield
 xlwt
+arrow
